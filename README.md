@@ -28,7 +28,7 @@ Este projeto tem como objetivo a implementação de um sistema de gestão de liv
 
 ### Tecnologias Utilizadas:
 
-- **Java 17**
+- **Java 21**
 - **Spring Boot**
 - **Spring Cloud Eureka** (Service Discovery)
 - **Spring Cloud Gateway** (API Gateway)
