@@ -1,0 +1,53 @@
+services:
+  eureka-server:
+    build: ./eureka-server/eureka-server  # Caminho para o Dockerfile dentro do eureka-server
+    ports:
+      - "8761:8761"
+    networks:
+      - livraria-net
+
+  gateway:
+    build: ./gateway/gateway  # Caminho para o Dockerfile dentro do gateway
+    ports:
+      - "8081:8081"
+    networks:
+      - livraria-net
+    depends_on:
+      - eureka-server
+      - rabbitmq
+
+  at-service:
+    build: ./AT/AT  # Caminho para o Dockerfile dentro do AT-Service
+    ports:
+      - "8080:8080"
+    networks:
+      - livraria-net
+    depends_on:
+      - eureka-server
+      - rabbitmq
+  notificacao-service:
+    build: ./NotificacaoService/NotificacaoService  # Caminho para o Dockerfile dentro do NotificacaoService
+    ports:
+      - "9000:9000"
+    networks:
+      - livraria-net
+    depends_on:
+      - eureka-server
+      - rabbitmq
+
+  rabbitmq:
+    image: rabbitmq:3-management  # Usando a imagem oficial do RabbitMQ
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - livraria-net
+
+networks:
+  livraria-net:
+    driver: bridge
